@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">هدوء</string>
+    <string name="tagline">أصوات تساعد الطفل على النوم</string>
+
+    <string name="label_play">تشغيل</string>
+    <string name="label_stop">إيقاف</string>
+    <string name="volume">مستوى الصوت</string>
+    <string name="sounds">اختر الصوت</string>
+
+    <string name="s_white">أبيض</string>
+    <string name="s_pink">وردي</string>
+    <string name="s_brown">بني</string>
+    <string name="s_shush">ششش</string>
+
+    <string name="s_waterfall">شلال</string>
+    <string name="s_storm">عاصفة</string>
+    <string name="s_jet">نفّاثة</string>
+    <string name="s_engine">محرّك</string>
+
+    <string name="s_hairdryer">فون</string>
+    <string name="s_vacuum">مكنسة</string>
+    <string name="s_fan">مروحة</string>
+    <string name="s_ac">مكيّف</string>
+    <string name="s_washer">غسالة</string>
+
+    <string name="s_car">سيارة</string>
+    <string name="s_train">قطار</string>
+    <string name="s_plane">طائرة</string>
+    <string name="s_rain">مطر</string>
+    <string name="s_river">نهر</string>
+    <string name="s_waves">أمواج</string>
+    <string name="s_heartbeat">نبض القلب</string>
+
+    <string name="g_pure">ضجيج نقي</string>
+    <string name="g_loud">قوي جدًا</string>
+    <string name="g_home">أجهزة المنزل</string>
+    <string name="g_move">حركة وماء</string>
+
+    <string name="strength">قوة الضجيج</string>
+    <string name="lvl_soft">هادئ</string>
+    <string name="lvl_normal">عادي</string>
+    <string name="lvl_loud">قوي جدًا</string>
+
+    <string name="channel_name">التشغيل</string>
+    <string name="channel_desc">إشعار دائم يبقي الصوت يعمل في الخلفية</string>
+    <string name="notif_title">هدوء — الصوت يعمل</string>
+    <string name="notif_text">اضغط «إيقاف» لإنهاء التشغيل</string>
+    <string name="action_stop">⏹  إيقاف</string>
+
+    <string name="battery_title">خطوة واحدة مهمة</string>
+    <string name="battery_text">جوالك يوقف التطبيقات في الخلفية لتوفير البطارية. اضغط الزر واختر «السماح» أو «غير مقيّد» حتى لا ينقطع الصوت أبدًا.</string>
+    <string name="battery_button">السماح بالعمل في الخلفية</string>
+
+    <string name="footer_hint">الصوت يستمر والشاشة مطفأة.\nلإيقافه: زر الإيقاف هنا أو من الإشعار.</string>
+</resources>

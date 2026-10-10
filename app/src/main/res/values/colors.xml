@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg_top">#0A0F22</color>
+    <color name="bg_bottom">#171A3A</color>
+    <color name="card">#1C2142</color>
+    <color name="card_sel">#262C5C</color>
+    <color name="stroke">#2A3160</color>
+    <color name="accent">#8B7BFF</color>
+    <color name="accent_2">#5BC8FF</color>
+    <color name="stop">#FF6B81</color>
+    <color name="warn">#FFC65C</color>
+    <color name="text">#F2F3FF</color>
+    <color name="text_dim">#A9AEDA</color>
+    <color name="text_faint">#6E74A8</color>
+    <color name="ic_launcher_background">#0F1430</color>
+</resources>
