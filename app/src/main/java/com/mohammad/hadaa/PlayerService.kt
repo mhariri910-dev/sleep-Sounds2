@@ -226,7 +226,10 @@ class PlayerService : Service(), AudioManager.OnAudioFocusChangeListener {
             AudioManager.AUDIOFOCUS_LOSS_TRANSIENT,
             AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> engine.setDuck(true)
             AudioManager.AUDIOFOCUS_GAIN -> engine.setDuck(false)
-            AudioManager.AUDIOFOCUS_LOSS -> stopPlayback()
+            // Früher: stopPlayback(). Eine andere App (Benachrichtigung, Assistent usw.) darf
+            // das Einschlafgeräusch nicht beenden. Es läuft weiter, bis der Nutzer stoppt.
+            // سابقًا كان الصوت يتوقف عندما يأخذ تطبيق آخر التركيز؛ الآن يستمر حتى تضغط إيقاف.
+            AudioManager.AUDIOFOCUS_LOSS -> engine.setDuck(false)
         }
     }
 

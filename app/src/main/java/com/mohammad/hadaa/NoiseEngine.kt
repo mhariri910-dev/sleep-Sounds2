@@ -3,6 +3,7 @@ package com.mohammad.hadaa
 import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioTrack
+import android.os.Process
 import kotlin.math.PI
 import kotlin.math.exp
 import kotlin.math.sin
@@ -81,16 +82,16 @@ class NoiseEngine {
 
     fun isRunning() = running
 
-    fun start() {
-        if (running) return
+    private fun buildTrack(): AudioTrack {
         val minBuf = AudioTrack.getMinBufferSize(
             SAMPLE_RATE,
             AudioFormat.CHANNEL_OUT_MONO,
             AudioFormat.ENCODING_PCM_FLOAT
         )
-        val bufSize = maxOf(minBuf, FRAMES_PER_BUFFER * 4 * 4)
-
-        val t = AudioTrack.Builder()
+        // Großer Puffer (~0,5 s): übersteht kurze CPU-Drosselung bei ausgeschaltetem Bildschirm.
+        // مخزن كبير (نصف ثانية تقريبًا) يتحمل بطء المعالج عند إطفاء الشاشة.
+        val bufSize = maxOf(minBuf, SAMPLE_RATE / 2 * 4)
+        return AudioTrack.Builder()
             .setAudioAttributes(
                 AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_MEDIA)
@@ -106,22 +107,49 @@ class NoiseEngine {
             )
             .setBufferSizeInBytes(bufSize)
             .setTransferMode(AudioTrack.MODE_STREAM)
+            .setPerformanceMode(AudioTrack.PERFORMANCE_MODE_POWER_SAVING)
             .build()
+    }
 
+    fun start() {
+        if (running) return
+        var t = buildTrack()
         track = t
         running = true
         fadeIn = 0f
         t.play()
 
         thread = Thread {
+            Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO)
             val buf = FloatArray(FRAMES_PER_BUFFER)
+            var failures = 0
             while (running) {
                 render(buf)
-                val written = t.write(buf, 0, buf.size, AudioTrack.WRITE_BLOCKING)
-                if (written < 0) break
+                val written = try {
+                    // Hat das System die Wiedergabe angehalten? Dann wieder starten.
+                    // إن أوقف النظام التشغيل نعيده فورًا.
+                    if (t.playState != AudioTrack.PLAYSTATE_PLAYING) t.play()
+                    t.write(buf, 0, buf.size, AudioTrack.WRITE_BLOCKING)
+                } catch (_: Exception) { -1 }
+
+                if (written < 0) {
+                    // Fehler (z. B. Audio-Server neu gestartet, Kopfhörer/Bluetooth gewechselt):
+                    // neuen AudioTrack bauen statt still zu sterben.
+                    // خطأ (تغيّر المخرج أو إعادة تشغيل خدمة الصوت): نبني مسارًا جديدًا بدل التوقف.
+                    failures++
+                    try { t.release() } catch (_: Exception) {}
+                    if (!running) break
+                    try { Thread.sleep(minOf(2000L, 200L * failures)) } catch (_: InterruptedException) { break }
+                    try {
+                        t = buildTrack()
+                        track = t
+                        t.play()
+                    } catch (_: Exception) { /* nächster Versuch */ }
+                } else {
+                    failures = 0
+                }
             }
         }.apply {
-            priority = Thread.MAX_PRIORITY
             name = "HadaaNoise"
             start()
         }
